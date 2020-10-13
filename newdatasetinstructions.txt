@@ -1,0 +1,14 @@
+Hi @Christoph-Schuhmann,
+
+Thank you for your interest. Sounds like an interesting idea!
+
+Listing the most important steps off the top of my head here:
+
+    To train on new datasets, you need to adapt your dataloader to the format we use in this repo. Have a look at the data folder and make sure your __getitem__ method is similar to ours.
+    Don't forget to add the path to your dataset in utils/mypath.py
+    Make config files (similar to the ones in the configs folder) for the pretext and clustering steps. I highly recommend using them.
+    Follow the steps in the readme
+
+The same question was asked in issue #8, but if I have more time later I can go into more detail.
+
+Hope this helps for now.

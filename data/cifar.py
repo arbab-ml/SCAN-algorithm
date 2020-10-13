@@ -147,6 +147,9 @@ class CIFAR10(Dataset):
         return "Split: {}".format("Train" if self.train is True else "Test")
 
 
+
+
+
 class CIFAR20(CIFAR10):
     """CIFAR20 Dataset.
 

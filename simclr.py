@@ -50,13 +50,13 @@ def main():
     train_transforms = get_train_transformations(p)
     print('Train transforms:', train_transforms)
     val_transforms = get_val_transformations(p)
-    print('Validation transforms:', val_transforms)
+    #print('Validation transforms:', val_transforms)
     train_dataset = get_train_dataset(p, train_transforms, to_augmented_dataset=True,
                                         split='train+unlabeled') # Split is for stl-10
-    val_dataset = get_val_dataset(p, val_transforms) 
+    #val_dataset = get_val_dataset(p, val_transforms) 
     train_dataloader = get_train_dataloader(p, train_dataset)
-    val_dataloader = get_val_dataloader(p, val_dataset)
-    print('Dataset contains {}/{} train/val samples'.format(len(train_dataset), len(val_dataset)))
+    #val_dataloader = get_val_dataloader(p, val_dataset)
+    #print('Dataset contains {}/{} train/val samples'.format(len(train_dataset), len(val_dataset)))
     
     # Memory Bank
     print(colored('Build MemoryBank', 'blue'))
@@ -66,10 +66,10 @@ def main():
                                 p['model_kwargs']['features_dim'],
                                 p['num_classes'], p['criterion_kwargs']['temperature'])
     memory_bank_base.cuda()
-    memory_bank_val = MemoryBank(len(val_dataset),
-                                p['model_kwargs']['features_dim'],
-                                p['num_classes'], p['criterion_kwargs']['temperature'])
-    memory_bank_val.cuda()
+    #memory_bank_val = MemoryBank(len(val_dataset),
+    #                            p['model_kwargs']['features_dim'],
+    #                            p['num_classes'], p['criterion_kwargs']['temperature'])
+    #memory_bank_val.cuda()
 
     # Criterion
     print(colored('Retrieve criterion', 'blue'))
@@ -116,8 +116,8 @@ def main():
 
         # Evaluate (To monitor progress - Not for validation)
         print('Evaluate ...')
-        top1 = contrastive_evaluate(val_dataloader, model, memory_bank_base)
-        print('Result of kNN evaluation is %.2f' %(top1)) 
+       # top1 = contrastive_evaluate(val_dataloader, model, memory_bank_base)
+        #print('Result of kNN evaluation is %.2f' %(top1)) 
         
         # Checkpoint
         print('Checkpoint ...')
@@ -141,10 +141,10 @@ def main():
     # Mine the topk nearest neighbors at the very end (Val)
     # These will be used for validation.
     print(colored('Fill memory bank for mining the nearest neighbors (val) ...', 'blue'))
-    fill_memory_bank(val_dataloader, model, memory_bank_val)
+   # fill_memory_bank(val_dataloader, model, memory_bank_val)
     topk = 5
     print('Mine the nearest neighbors (Top-%d)' %(topk)) 
-    indices, acc = memory_bank_val.mine_nearest_neighbors(topk)
+    #indices, acc = memory_bank_val.mine_nearest_neighbors(topk)
     print('Accuracy of top-%d nearest neighbors on val set is %.2f' %(topk, 100*acc))
     np.save(p['topk_neighbors_val_path'], indices)   
 

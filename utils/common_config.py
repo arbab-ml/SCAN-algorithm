@@ -44,7 +44,7 @@ def get_feature_dimensions_backbone(p):
 def get_model(p, pretrain_path=None):
     # Get backbone
     if p['backbone'] == 'resnet18':
-        if p['train_db_name'] in ['cifar-10', 'cifar-20']:
+        if p['train_db_name'] in ['cifar-10', 'cifar-20', 'batsnet']:
             from models.resnet_cifar import resnet18
             backbone = resnet18()
 
@@ -56,7 +56,7 @@ def get_model(p, pretrain_path=None):
             raise NotImplementedError
 
     elif p['backbone'] == 'resnet50':
-        if 'imagenet' in p['train_db_name']:
+        if p['train_db_name'] in ['imagenet', 'batsnet']:
             from models.resnet import resnet50
             backbone = resnet50()  
 
@@ -135,6 +135,10 @@ def get_train_dataset(p, transform, to_augmented_dataset=False,
     elif p['train_db_name'] == 'imagenet':
         from data.imagenet import ImageNet
         dataset = ImageNet(split='train', transform=transform)
+        #ADDING SUPPORT FOR CUSTOM DATASET
+    elif p['train_db_name'] == 'batsnet':
+        from data.batsnet import batsnet
+        dataset = batsnet(split='train', transform=transform)
 
     elif p['train_db_name'] in ['imagenet_50', 'imagenet_100', 'imagenet_200']:
         from data.imagenet import ImageNetSubset
@@ -205,6 +209,9 @@ def get_val_dataloader(p, dataset):
 
 
 def get_train_transformations(p):
+    print("..........................")
+    print(p)
+    print("..........................")
     if p['augmentation_strategy'] == 'standard':
         # Standard augmentation strategy
         return transforms.Compose([

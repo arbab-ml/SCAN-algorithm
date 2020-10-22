@@ -18,7 +18,7 @@ class batsnet(datasets.ImageFolder):
                                          transform=None)
         self.transform = transform 
         self.split = split
-        self.resize = tf.Resize(256)
+        self.resize = tf.Resize(360)
     
     def __len__(self):
         return len(self.imgs)
@@ -31,9 +31,21 @@ class batsnet(datasets.ImageFolder):
         img = self.resize(img)
 
         if self.transform is not None:
-            img = self.transform(img)
+          #THIS IS WHERE WE CAN SEND ARGUEMNET TO TRANSFORM, THAT'S DEFINED IN COMMON_CONFIG
+          #Making a custom iterator for transforms.customs
 
-        out = {'image': img, 'target': target, 'meta': {'im_size': im_size, 'index': index}}
+          ##The MISTAKE IS IMG IS AGAIN OF 360X360
+            for t in self.transform.transforms:
+                if (str(t).find("batsnet_transformation")!=-1):
+                    img = t( img, path)
+                else:
+                    img = t(img)
+        
+          
+
+
+
+        out = {'image': img, 'target': target, 'path':path, 'meta': {'im_size': im_size, 'index': index}}
 
         return out
 

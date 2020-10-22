@@ -26,7 +26,7 @@ parser.add_argument('--config_env',
 parser.add_argument('--config_exp',
                     help='Config file for the experiment')
 args = parser.parse_args()
-
+global_standard_transform=None
 def main():
 
     # Retrieve config file
@@ -54,6 +54,7 @@ def main():
     train_dataset = get_train_dataset(p, train_transforms, to_augmented_dataset=True,
                                         split='train+unlabeled') # Split is for stl-10
     #val_dataset = get_val_dataset(p, val_transforms) 
+
     train_dataloader = get_train_dataloader(p, train_dataset)
     #val_dataloader = get_val_dataloader(p, val_dataset)
     #print('Dataset contains {}/{} train/val samples'.format(len(train_dataset), len(val_dataset)))

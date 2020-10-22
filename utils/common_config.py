@@ -9,8 +9,9 @@ import torch
 import torchvision.transforms as transforms
 from data.augment import Augment, Cutout
 from utils.collate import collate_custom
+from PIL import Image
 
- 
+
 def get_criterion(p):
     if p['criterion'] == 'simclr':
         from losses.losses import SimCLRLoss
@@ -147,12 +148,12 @@ def get_train_dataset(p, transform, to_augmented_dataset=False,
 
     else:
         raise ValueError('Invalid train dataset {}'.format(p['train_db_name']))
-    
+
     # Wrap into other dataset (__getitem__ changes)
     if to_augmented_dataset: # Dataset returns an image and an augmentation of that image.
         from data.custom_dataset import AugmentedDataset
-        dataset = AugmentedDataset(dataset)
-
+        dataset = AugmentedDataset(dataset, standard_transformer)
+    inspect=dataset[0]
     if to_neighbors_dataset: # Dataset returns an image and one of its nearest neighbors.
         from data.custom_dataset import NeighborsDataset
         indices = np.load(p['topk_neighbors_train_path'])
@@ -207,8 +208,24 @@ def get_val_dataloader(p, dataset):
             batch_size=p['batch_size'], pin_memory=True, collate_fn=collate_custom,
             drop_last=False, shuffle=False)
 
+class batsnet_transformation:
+    def __init__(self):
+        print("batsnet_transformation created")
+
+    def __call__(self, img, path):
+       #return img
+        with open(path, 'rb') as f:
+            return Image.open(f).convert('RGB')  #For now we are not changing anything
+        # print(file_path)
+        
+standard_transformer=None
 
 def get_train_transformations(p):
+    global standard_transformer
+    standard_transformer = transforms.Compose([
+           # transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
+            transforms.ToTensor(),
+            transforms.Normalize(**p['augmentation_kwargs']['normalize'])])
     print("..........................")
     print(p)
     print("..........................")
@@ -216,7 +233,7 @@ def get_train_transformations(p):
         # Standard augmentation strategy
         return transforms.Compose([
             transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
-            transforms.RandomHorizontalFlip(),
+            batsnet_transformation(),  #THIS NEW LINE IS ADDED
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])
         ])
@@ -230,6 +247,14 @@ def get_train_transformations(p):
                 transforms.ColorJitter(**p['augmentation_kwargs']['color_jitter'])
             ], p=p['augmentation_kwargs']['color_jitter_random_apply']['p']),
             transforms.RandomGrayscale(**p['augmentation_kwargs']['random_grayscale']),
+            transforms.ToTensor(),
+            transforms.Normalize(**p['augmentation_kwargs']['normalize'])
+        ])
+    elif p['augmentation_strategy'] == 'batsnet_strategy':
+        # Augmentation strategy from the batsnet experimentation
+        return transforms.Compose([
+            transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
+            batsnet_transformation(),  #THIS NEW LINE IS ADDED
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])
         ])

@@ -5,13 +5,12 @@ Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-
 """ 
     AugmentedDataset
     Returns an image together with an augmentation.
 """
 class AugmentedDataset(Dataset):
-    def __init__(self, dataset):
+    def __init__(self, dataset, standard_transformer):
         super(AugmentedDataset, self).__init__()
         transform = dataset.transform
         dataset.transform = None
@@ -22,7 +21,7 @@ class AugmentedDataset(Dataset):
             self.augmentation_transform = transform['augment']
 
         else:
-            self.image_transform = transform
+            self.image_transform = standard_transformer
             self.augmentation_transform = transform
 
     def __len__(self):
@@ -31,9 +30,25 @@ class AugmentedDataset(Dataset):
     def __getitem__(self, index):
         sample = self.dataset.__getitem__(index)
         image = sample['image']
-        
-        sample['image'] = self.image_transform(image)
-        sample['image_augmented'] = self.augmentation_transform(image)
+        path=sample['path']
+##
+       # sample['image'] = self.image_transform(image)
+        sample_image=image
+        for t in self.image_transform.transforms:
+            if (str(t).find("batsnet_transformation")!=-1):
+                sample_image = t( sample_image, path)
+            else:
+                sample_image = t(sample_image)
+        sample['image']=sample_image
+##
+        #sample['image_augmented'] = self.augmentation_transform(image)
+        augmented_image=image
+        for t in self.augmentation_transform.transforms:
+            if (str(t).find("batsnet_transformation")!=-1):
+                augmented_image = t( augmented_image, path)
+            else:
+                augmented_image = t(augmented_image)        
+        sample['image_augmented'] =augmented_image
 
         return sample
 

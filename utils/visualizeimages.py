@@ -1,0 +1,1 @@
+import numpy as np;import matplotlib.pyplot as plt;plt.imshow( np.moveaxis(inspect['image_augmented'].numpy(), 0,2))

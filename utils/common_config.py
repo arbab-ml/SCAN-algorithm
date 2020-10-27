@@ -214,7 +214,11 @@ class batsnet_transformation:
 
     def __call__(self, img, path):
        #return img
-        with open(path, 'rb') as f:
+        #modifiying the path to read from augmented folder instead of the base 
+        file_name=path.split('/')[-1]
+        base_path='/'.join(path.split('/')[:-1])
+        modifed_path=base_path+'/augmented/'+file_name
+        with open(modifed_path, 'rb') as f:
             return Image.open(f).convert('RGB')  #For now we are not changing anything
         # print(file_path)
         
@@ -233,7 +237,7 @@ def get_train_transformations(p):
         # Standard augmentation strategy
         return transforms.Compose([
             transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
-            batsnet_transformation(),  #THIS NEW LINE IS ADDED
+          #  batsnet_transformation(),  #THIS NEW LINE IS ADDED, !!!!! I DONT THINK THIS IS NEEDED HERE
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])
         ])

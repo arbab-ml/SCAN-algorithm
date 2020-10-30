@@ -12,8 +12,9 @@
             "console": "integratedTerminal",
             "args": [
                 "--config_env", "configs/env.yml",
-                "--config_exp", "configs/pretext/simclr_batsnet.yml"
-             ]
+                "--config_exp", "configs/scan/scan_batsnet.yml"
+             ], 
+             "justMyCode": true
         }
     ]
 }

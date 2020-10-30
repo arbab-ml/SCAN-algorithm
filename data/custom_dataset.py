@@ -86,8 +86,23 @@ class NeighborsDataset(Dataset):
         neighbor_index = np.random.choice(self.indices[index], 1)[0]
         neighbor = self.dataset.__getitem__(neighbor_index)
 
-        anchor['image'] = self.anchor_transform(anchor['image'])
-        neighbor['image'] = self.neighbor_transform(neighbor['image'])
+       # anchor['image'] = self.anchor_transform(anchor['image'])
+        temp=anchor['image']
+        for t in self.anchor_transform.transforms:
+            if (str(t).find("batsnet_transformation")!=-1):
+                temp = t( temp, anchor["path"])
+            else:
+                temp = t(temp) 
+        anchor['image']=temp
+
+        #neighbor['image'] = self.neighbor_transform(neighbor['image'])
+        temp=neighbor['image']
+        for t in self.neighbor_transform.transforms:
+            if (str(t).find("batsnet_transformation")!=-1):
+                temp = t( temp, anchor["path"])
+            else:
+                temp = t(temp) 
+        neighbor['image']=temp
 
         output['anchor'] = anchor['image']
         output['neighbor'] = neighbor['image'] 

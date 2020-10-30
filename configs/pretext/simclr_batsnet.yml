@@ -34,7 +34,7 @@ num_workers: 8
 # Transformations
 augmentation_strategy: batsnet_strategy 
 augmentation_kwargs:
-   random_resized_crop:
+   crop_size:
       size: 360
       scale: [0.2, 1.0]
    color_jitter_random_apply:
@@ -51,7 +51,7 @@ augmentation_kwargs:
       std: [0.2023, 0.1994, 0.2010]
 
 transformation_kwargs:
-   crop_size: 256
+   crop_size: 360
    normalize:
       mean: [0.4914, 0.4822, 0.4465]
       std: [0.2023, 0.1994, 0.2010]

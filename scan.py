@@ -31,15 +31,15 @@ def main():
     # Data
     print(colored('Get dataset and dataloaders', 'blue'))
     train_transformations = get_train_transformations(p)
-    val_transformations = get_val_transformations(p)
+    #val_transformations = get_val_transformations(p)
     train_dataset = get_train_dataset(p, train_transformations, 
                                         split='train', to_neighbors_dataset = True)
-    val_dataset = get_val_dataset(p, val_transformations, to_neighbors_dataset = True)
+    #val_dataset = get_val_dataset(p, val_transformations, to_neighbors_dataset = True)
     train_dataloader = get_train_dataloader(p, train_dataset)
-    val_dataloader = get_val_dataloader(p, val_dataset)
+    val_dataloader = get_val_dataloader(p, train_dataset)  #!val_ replaced with train_
     print('Train transforms:', train_transformations)
-    print('Validation transforms:', val_transformations)
-    print('Train samples %d - Val samples %d' %(len(train_dataset), len(val_dataset)))
+    #print('Validation transforms:', val_transformations)
+    #print('Train samples %d - Val samples %d' %(len(train_dataset), len(val_dataset)))
     
     # Model
     print(colored('Get model', 'blue'))
@@ -95,9 +95,13 @@ def main():
         scan_train(train_dataloader, model, criterion, optimizer, epoch, p['update_cluster_head_only'])
 
         # Evaluate 
-        print('Make prediction on validation set ...')
-        predictions = get_predictions(p, val_dataloader, model)
 
+        #!!!!!!!!!!!!!!!!!Skipping the next lines because we are not evaluating YET. 
+        
+
+        print('Make prediction on validation set ...')
+        predictions = get_predictions(p, val_dataloader, model)   #inputting the train data to get the clusters !! 
+        continue
         print('Evaluate based on SCAN loss ...')
         scan_stats = scan_evaluate(predictions)
         print(scan_stats)

@@ -216,7 +216,7 @@ class batsnet_transformation:
        #return img
         #modifiying the path to read from augmented folder instead of the base 
         file_name=path.split('/')[-1]
-        base_path='/'.join(path.split('/')[:-1])
+        base_path='/'.join(path.split('/')[:-3])# Going three directories back . THIS IS DEPENDENT ON THE STRCTURE of folders. 
         modifed_path=base_path+'/augmented/'+file_name
         with open(modifed_path, 'rb') as f:
             return Image.open(f).convert('RGB')  #For now we are not changing anything
@@ -227,7 +227,7 @@ standard_transformer=None
 def get_train_transformations(p):
     global standard_transformer
     standard_transformer = transforms.Compose([
-           # transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
+           transforms.CenterCrop(p['augmentation_kwargs']['crop_size']),
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])])
     print("..........................")
@@ -236,7 +236,7 @@ def get_train_transformations(p):
     if p['augmentation_strategy'] == 'standard':
         # Standard augmentation strategy
         return transforms.Compose([
-            transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
+            transforms.CenterCrop(p['augmentation_kwargs']['crop_size']),
           #  batsnet_transformation(),  #THIS NEW LINE IS ADDED, !!!!! I DONT THINK THIS IS NEEDED HERE
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])
@@ -245,7 +245,7 @@ def get_train_transformations(p):
     elif p['augmentation_strategy'] == 'simclr':
         # Augmentation strategy from the SimCLR paper
         return transforms.Compose([
-            transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
+            transforms.RandomResizedCrop(**p['augmentation_kwargs']['crop_size']),
             transforms.RandomHorizontalFlip(),
             transforms.RandomApply([
                 transforms.ColorJitter(**p['augmentation_kwargs']['color_jitter'])
@@ -257,7 +257,7 @@ def get_train_transformations(p):
     elif p['augmentation_strategy'] == 'batsnet_strategy':
         # Augmentation strategy from the batsnet experimentation
         return transforms.Compose([
-            transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop']),
+            transforms.CenterCrop(p['augmentation_kwargs']['crop_size']), # It was random_resized_crop in simClr now changing
             batsnet_transformation(),  #THIS NEW LINE IS ADDED
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])

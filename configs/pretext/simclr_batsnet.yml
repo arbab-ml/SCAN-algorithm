@@ -2,7 +2,11 @@
 setup: simclr
 
 # Model
+<<<<<<< HEAD
 backbone: resnet50
+=======
+backbone: resnet18
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
 model_kwargs:
    head: mlp
    features_dim: 128
@@ -34,7 +38,13 @@ num_workers: 8
 # Transformations
 augmentation_strategy: batsnet_strategy 
 augmentation_kwargs:
+<<<<<<< HEAD
    crop_size: 360
+=======
+   crop_size:
+      size: 360
+      scale: [0.2, 1.0]
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
    color_jitter_random_apply:
       p: 0.8
    color_jitter:

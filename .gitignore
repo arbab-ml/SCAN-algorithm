@@ -5,7 +5,10 @@ cifar-10-batches-py/data_batch_4
 cifar-10-batches-py/data_batch_5
 cifar-10-batches-py/test_batch
 cifar-10-python.tar.gz
+<<<<<<< HEAD
 repository_eccv/*
+=======
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
 repository_eccv/cifar-10/pretext/checkpoint.pth.tar
 repository_eccv/cifar-10/pretext/model.pth.tar
 repository_eccv/cifar-10/scan/checkpoint.pth.tar

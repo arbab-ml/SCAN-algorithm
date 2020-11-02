@@ -101,7 +101,11 @@ def main():
 
         print('Make prediction on validation set ...')
         predictions = get_predictions(p, val_dataloader, model)   #inputting the train data to get the clusters !! 
+<<<<<<< HEAD
         
+=======
+        continue
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
         print('Evaluate based on SCAN loss ...')
         scan_stats = scan_evaluate(predictions)
         print(scan_stats)
@@ -134,11 +138,19 @@ def main():
     model_checkpoint = torch.load(p['scan_model'], map_location='cpu')
     model.module.load_state_dict(model_checkpoint['model'])
     predictions = get_predictions(p, val_dataloader, model)
+<<<<<<< HEAD
     # clustering_stats = hungarian_evaluate(model_checkpoint['head'], predictions, 
     #                         class_names=val_dataset.dataset.classes, 
     #                         compute_confusion_matrix=True, 
     #                         confusion_matrix_file=os.path.join(p['scan_dir'], 'confusion_matrix.png'))
     # print(clustering_stats)         
+=======
+    clustering_stats = hungarian_evaluate(model_checkpoint['head'], predictions, 
+                            class_names=val_dataset.dataset.classes, 
+                            compute_confusion_matrix=True, 
+                            confusion_matrix_file=os.path.join(p['scan_dir'], 'confusion_matrix.png'))
+    print(clustering_stats)         
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
     
 if __name__ == "__main__":
     main()

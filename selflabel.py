@@ -61,9 +61,15 @@ def main():
     train_dataset = get_train_dataset(p, {'standard': val_transforms, 'augment': strong_transforms},
                                         split='train', to_augmented_dataset=True) 
     train_dataloader = get_train_dataloader(p, train_dataset)
+<<<<<<< HEAD
     #val_dataset = get_val_dataset(p, val_transforms) 
     val_dataloader = get_val_dataloader(p, train_dataset) # 
     print(colored('Train samples %d - Val samples %d' %(len(train_dataset), len(train_dataset)), 'yellow')) #val_ replaced with train_
+=======
+    val_dataset = get_val_dataset(p, val_transforms) 
+    val_dataloader = get_val_dataloader(p, val_dataset)
+    print(colored('Train samples %d - Val samples %d' %(len(train_dataset), len(val_dataset)), 'yellow'))
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
 
     # Checkpoint
     if os.path.exists(p['selflabel_checkpoint']):
@@ -113,11 +119,19 @@ def main():
     # Evaluate and save the final model
     print(colored('Evaluate model at the end', 'blue'))
     predictions = get_predictions(p, val_dataloader, model)
+<<<<<<< HEAD
     # clustering_stats = hungarian_evaluate(0, predictions, 
     #                             class_names=val_dataset.classes,
     #                             compute_confusion_matrix=True,
     #                             confusion_matrix_file=os.path.join(p['selflabel_dir'], 'confusion_matrix.png'))
     # print(clustering_stats)
+=======
+    clustering_stats = hungarian_evaluate(0, predictions, 
+                                class_names=val_dataset.classes,
+                                compute_confusion_matrix=True,
+                                confusion_matrix_file=os.path.join(p['selflabel_dir'], 'confusion_matrix.png'))
+    print(clustering_stats)
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
     torch.save(model.module.state_dict(), p['selflabel_model'])
 
 

@@ -218,10 +218,15 @@ class batsnet_transformation:
         file_name=path.split('/')[-1]
         base_path='/'.join(path.split('/')[:-3])# Going three directories back . THIS IS DEPENDENT ON THE STRCTURE of folders. 
         modifed_path=base_path+'/augmented/'+file_name
+<<<<<<< HEAD
         resize_func = transforms.Resize(360)  #Resizing the image (As done with original image)
 
         with open(modifed_path, 'rb') as f:
             return resize_func(Image.open(f).convert('RGB'))  #For now we are not changing anything
+=======
+        with open(modifed_path, 'rb') as f:
+            return Image.open(f).convert('RGB')  #For now we are not changing anything
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
         # print(file_path)
         
 standard_transformer=None
@@ -239,7 +244,11 @@ def get_train_transformations(p):
         # Standard augmentation strategy
         return transforms.Compose([
             transforms.CenterCrop(p['augmentation_kwargs']['crop_size']),
+<<<<<<< HEAD
 
+=======
+          #  batsnet_transformation(),  #THIS NEW LINE IS ADDED, !!!!! I DONT THINK THIS IS NEEDED HERE
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])
         ])
@@ -259,11 +268,19 @@ def get_train_transformations(p):
     elif p['augmentation_strategy'] == 'batsnet_strategy':
         # Augmentation strategy from the batsnet experimentation
         return transforms.Compose([
+<<<<<<< HEAD
             batsnet_transformation(), 
             transforms.CenterCrop(p['augmentation_kwargs']['crop_size']), # It was random_resized_crop in simClr now changing #THIS NEW LINE IS ADDED
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize'])   #THIS IS RESPONSIBLE FOR DISTORDING THE IMAGE :-!
         ]) 
+=======
+            transforms.CenterCrop(p['augmentation_kwargs']['crop_size']), # It was random_resized_crop in simClr now changing
+            batsnet_transformation(),  #THIS NEW LINE IS ADDED
+            transforms.ToTensor(),
+            transforms.Normalize(**p['augmentation_kwargs']['normalize'])
+        ])
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
     
     elif p['augmentation_strategy'] == 'ours':
         # Augmentation strategy from our paper 

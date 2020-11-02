@@ -11,7 +11,11 @@ update_cluster_head_only: False # Update full network in SCAN
 num_heads: 1 # Only use one head
 
 # Model
+<<<<<<< HEAD
 backbone: resnet50
+=======
+backbone: resnet18
+>>>>>>> db23360031c529a04f0a144b63e5f3fe49feb44f
 
 # Dataset
 train_db_name: batsnet

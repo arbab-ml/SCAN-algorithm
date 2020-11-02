@@ -1,0 +1,14 @@
+cifar-10-batches-py/data_batch_1
+cifar-10-batches-py/data_batch_2
+cifar-10-batches-py/data_batch_3
+cifar-10-batches-py/data_batch_4
+cifar-10-batches-py/data_batch_5
+cifar-10-batches-py/test_batch
+cifar-10-python.tar.gz
+repository_eccv/*
+repository_eccv/cifar-10/pretext/checkpoint.pth.tar
+repository_eccv/cifar-10/pretext/model.pth.tar
+repository_eccv/cifar-10/scan/checkpoint.pth.tar
+repository_eccv/cifar-10/scan/model.pth.tar
+repository_eccv/cifar-10/selflabel/checkpoint.pth.tar
+repository_eccv/cifar-10/selflabel/model.pth.tar

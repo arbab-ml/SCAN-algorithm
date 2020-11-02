@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+
+//method TO RUN: 
+// FIRST dELETE EVERTYING FROM REPOSITORY_EECV FOLDER AND THEN START FROM PRETEXT TASK, SEQUENTIALLY. 
+
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python: SCAN",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_env", "configs/env.yml",
+                "--config_exp", "configs/scan/scan_batsnet.yml"
+             ], 
+             "justMyCode": true
+        },
+        {
+            "name": "Python: PRETEXT",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_env", "configs/env.yml",
+                "--config_exp", "configs/pretext/simclr_batsnet.yml"
+             ], 
+             "justMyCode": true
+        },  {
+            "name": "Python: SELF-LABEL",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_env", "configs/env.yml",
+                "--config_exp", "configs/selflabel/selflabel_batsnet.yml"
+             ], 
+             "justMyCode": true
+        }
+    ]
+}
+//CLI VERSION python 
+//simclr.py --config_env configs/your_env.yml --config_exp configs/pretext/simclr_cifar10.yml
+// python scan.py --config_env configs/your_env.yml --config_exp configs/scan/scan_cifar10.yml
+// python selflabel.py --config_env configs/your_env.yml --config_exp configs/selflabel/selflabel_cifar10.yml

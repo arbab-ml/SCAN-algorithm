@@ -48,8 +48,8 @@ optimizer_kwargs:
    weight_decay: 0.0
    nesterov: False
    momentum: 0.9
-epochs: 25
-batch_size: 128
+epochs: 5
+batch_size: 10 
 num_workers: 8
 
 # Scheduler

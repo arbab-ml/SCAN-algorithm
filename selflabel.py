@@ -5,7 +5,8 @@ Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by
 import argparse
 import os
 import torch
-
+import pandas as pd
+import cv2
 from utils.config import create_config
 from utils.common_config import get_train_dataset, get_train_transformations,\
                                 get_val_dataset, get_val_transformations,\
@@ -120,6 +121,25 @@ def main():
     #                             confusion_matrix_file=os.path.join(p['selflabel_dir'], 'confusion_matrix.png'))
     # print(clustering_stats)
     torch.save(model.module.state_dict(), p['selflabel_model'])
+    #------------------------------------------------------------------
+    #Now, saving the i) results in CSV and ii) results in a dedicated folder with $cluster_$imagefile ($probability).png(s)
+    results_folder="/media/ausserver4/DATA/Code/experiments/audio data analysis/audio-clustering/plots/spectrograms/results/"
+    all_filedirectories=[just_path[0] for just_path in train_dataset.dataset.imgs] # this is a list
+    cluster_labels=predictions[0]['predictions']
+    #cluster_probs=predictions[0]['probabilities'], Leaving it for now. 
+    final_results=pd.DataFrame(columns=['file_directory', 'cluster'])
+    final_results["file_directory"]=all_filedirectories
+    final_results['cluster']=cluster_labels
+    final_results.to_csv(results_folder+'/summary file.csv')
+    #Now, saving the files (themselves) while renaming them
+    for file_directory,cluster in zip(final_results.file_directory, final_results.cluster):
+        #Read file
+        image_data=cv2.imread(file_directory)
+        #re-save it. 
+        original_name=file_directory.split('/')[-1]
+        modified_file_name=str(cluster)+' Cluster: '+original_name
+        modified_path=results_folder+modified_file_name 
+        cv2.imwrite(modified_path,image_data)        
 
 
 if __name__ == "__main__":

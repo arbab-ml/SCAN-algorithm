@@ -36,7 +36,7 @@ def main():
                                         split='train', to_neighbors_dataset = True)
     #val_dataset = get_val_dataset(p, val_transformations, to_neighbors_dataset = True)
     train_dataloader = get_train_dataloader(p, train_dataset)
-    val_dataloader = get_val_dataloader(p, train_dataset)  #!val_ replaced with train_
+    val_dataloader = get_val_dataloader(p, train_dataset)  #!val_dataset replaced with train_...
     print('Train transforms:', train_transformations)
     #print('Validation transforms:', val_transformations)
     #print('Train samples %d - Val samples %d' %(len(train_dataset), len(val_dataset)))

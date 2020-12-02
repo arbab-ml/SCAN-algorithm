@@ -24,6 +24,6 @@ class MyPath(object):
             return '/path/to/imagenet/'
         
         elif database in ['batsnet']:
-            return '/media/ausserver4/DATA/Code/experiments/audio data analysis/audio-clustering/plots/spectrograms'
+            return '/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/plots/spectrograms'
         else:
             raise NotImplementedError

@@ -141,7 +141,7 @@ def plot_spectrogram(signals, labels_flag=False, rate=44100,mode="simple", targe
 		else:
 			wav_time_shift = np.r_[np.random.uniform(-0.001,0.001, -start_), signals[:start_]]
 		#^ processing done, now plotting
-		spec = np.abs(librosa.stft(wav_time_shift, hop_length=hop_length_value, n_fft=1024))
+		spec = np.abs(librosa.stft(wav_time_shift, hop_length=hop_length_value, n_fft=5120))
 		spec = librosa.amplitude_to_db(spec, ref=np.max)
 		axes=librosa.display.specshow(spec, sr=rate, x_axis='time',hop_length=hop_length_value, y_axis='linear')
 		ax2 = fig.gca() #getting this to set the range
@@ -162,7 +162,7 @@ def plot_spectrogram(signals, labels_flag=False, rate=44100,mode="simple", targe
 			cut_len = len(wav_speed_tune) - (target_length*rate)
 			wav_speed_tune = wav_speed_tune[int(cut_len/2):int(cut_len/2)+int(target_length*rate)]
 		#^ processing done, now plotting
-		spec = np.abs(librosa.stft(wav_speed_tune, hop_length=hop_length_value, n_fft=1024))
+		spec = np.abs(librosa.stft(wav_speed_tune, hop_length=hop_length_value, n_fft=5120))
 		spec = librosa.amplitude_to_db(spec, ref=np.max)
 		axes=librosa.display.specshow(spec, sr=rate, x_axis='time',hop_length=hop_length_value, y_axis='linear')
 		ax2 = fig.gca() #getting this to set the range
@@ -188,10 +188,12 @@ def plot_mel_spectrogram(signals, labels_flag=False, rate=44100):
 #https://www.kaggle.com/haqishen/augmentation-methods-for-audio
 
 
-#input_directory = r'/media/ausserver4/DATA/Bats audio records' # use your path
-input_directory = r'/media/ausserver4/DATA/Bats audio records/unsampled Two Samples'
-#output_directory=r'/media/ausserver4/DATA/Code/experiments/audio data analysis/audio-clustering/all plots'
-output_directory=r'/media/ausserver4/DATA/Bats audio records/unsampled Two Samples'
+
+#input_directory = r'/home/rabi/Documents/Thesis/unsampled Two Samples'
+input_directory = r'/media/rabi/Data/Thesis Data/Bats audio records'
+
+#output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/all plots'
+output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/plots'
 final_target_length=1 #1 second
 iterator=0
 random.seed(5) 
@@ -209,7 +211,7 @@ for path in (Path(input_directory).rglob('*.wav')):
 		start_value=random.randrange(0, int(length)-final_target_length, 1)
 		end_value=start_value+final_target_length
 		signal=signal[(start_value*sr):(end_value*sr)]
-  
+
 		#Now saving the statistics (sr and length)
 		#filename_short=save_to.split('/')[-1]
 		temp_results={"file_name":save_to, "length": length, "sample rate": sr}    
@@ -221,17 +223,24 @@ for path in (Path(input_directory).rglob('*.wav')):
 		#plot_mel_spectrogram(signal, rate=sr).savefig(output_directory+'/mel spectrograms/'+save_to+'.png')
 		
 		#Making the plots, 3 modes are available = simple, speedtune, timeshift
-
-		plot_spectrogram(signal,rate=sr, mode="simple", target_length=length).savefig(output_directory+'/'+save_to+'.png')
+		new_length=len(signal)/sr
+		plot_spectrogram(signal,rate=sr, mode="simple", target_length=new_length).savefig(output_directory+'/spectrograms/batsnet_train/1/'+save_to+'.png')
 		#plot_spectrogram(signal,rate=sr, mode="simple", target_length=length).savefig(output_directory+'/spectrograms/original/'+save_to+'.png')
+		plt.close()
+
+
 		
-		#########Augmentation OFF######
-		# random_augmentation=random.randint(0, 1)
-		# if(random_augmentation==0):
-		# 	plot_spectrogram(signal,rate=sr, mode="timeshift", target_length=length).savefig(output_directory+'/spectrograms/augmented/'+save_to+'.png')
-		# else:
-		# 	plot_spectrogram(signal,rate=sr, mode="speedtune",target_length=length).savefig(output_directory+'/spectrograms/augmented/'+save_to+'.png')
-		#########Augmentation OFF######
+		random_augmentation=random.randint(1, 1)
+		if(random_augmentation==0):
+			plot_spectrogram(signal,rate=sr, mode="timeshift", target_length=new_length).savefig(output_directory+'/spectrograms/augmented/'+save_to+'.png')
+			plt.close()
+
+
+		else:
+			plot_spectrogram(signal,rate=sr, mode="speedtune",target_length=new_length).savefig(output_directory+'/spectrograms/augmented/'+save_to+'.png')
+			plt.close()
+
+
 
 		iterator=iterator+1
 		print(iterator)

@@ -20,7 +20,7 @@ num_heads: 1
 # Dataset
 train_db_name: batsnet
 val_db_name: batsnet
-num_classes: 10
+num_classes: 5
 
 # Transformations
 augmentation_strategy: batsnet_strategy 
@@ -48,8 +48,8 @@ optimizer_kwargs:
    weight_decay: 0.0
    nesterov: False
    momentum: 0.9
-epochs: 5
-batch_size: 10 
+epochs: 100
+batch_size: 100 
 num_workers: 8
 
 # Scheduler

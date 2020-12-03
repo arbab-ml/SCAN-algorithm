@@ -10,7 +10,7 @@ model_kwargs:
 # Dataset
 train_db_name: batsnet
 val_db_name: batsnet
-num_classes: 10
+num_classes: 5
 
 # Loss
 criterion: simclr
@@ -28,7 +28,7 @@ optimizer_kwargs:
 scheduler: cosine
 scheduler_kwargs:
    lr_decay_rate: 0.1
-batch_size: 5 
+batch_size: 100 
 num_workers: 8
 
 # Transformations

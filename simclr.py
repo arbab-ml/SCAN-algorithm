@@ -113,6 +113,7 @@ def main():
 
         # Fill memory bank
         print('Fill memory bank for kNN...')
+        
         fill_memory_bank(base_dataloader, model, memory_bank_base)
 
         # Evaluate (To monitor progress - Not for validation)

@@ -19,6 +19,7 @@ pd.plotting.register_matplotlib_converters()
 import matplotlib.pyplot as plt
 import seaborn as sns
 import random
+from scipy import stats
 
 import os
 from scipy.io import wavfile
@@ -188,40 +189,47 @@ def plot_mel_spectrogram(signals, labels_flag=False, rate=44100):
 #https://www.kaggle.com/haqishen/augmentation-methods-for-audio
 
 
-
+mode="just-calculations"
+sample_size=9999999999
 #input_directory = r'/home/rabi/Documents/Thesis/unsampled Two Samples'
 input_directory = r'/media/rabi/Data/Thesis Data/Bats audio records'
-
 #output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/all plots'
 output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/plots'
 final_target_length=1 #1 second
 iterator=0
 random.seed(5) 
 all_stats=pd.DataFrame(columns=["file_name", "length", "sample rate"])
-for path in (Path(input_directory).rglob('*.wav')):
+for path in tqdm(Path(input_directory).rglob('*.wav')):
 	try:
 		save_to= str(path.relative_to(input_directory)).split('/')[-1]
 		signal, sr = librosa.load(path,sr=None)    #Explicitly Setting sr=None ensures original sampling preserved -- STOVF    
 		#Segmenting to a random value of 1 seconds (for initial experiemtation)
 		length= signal.shape[0]/sr 
+		temp_results={"file_name":save_to, "length": length, "sample rate": sr}    
+		all_stats=all_stats.append(temp_results, ignore_index=True)
+		
+		iterator=iterator+1
+		#print(iterator)
+		if (iterator>=sample_size):
+		    break
+		
+		if (mode=="just-calculations"):
+			continue
 		#choosing the random starting point
 		if(length<final_target_length):
 			print("lengh less than threshold")
 			continue
+
 		start_value=random.randrange(0, int(length)-final_target_length, 1)
 		end_value=start_value+final_target_length
 		signal=signal[(start_value*sr):(end_value*sr)]
-
 		#Now saving the statistics (sr and length)
 		#filename_short=save_to.split('/')[-1]
-		temp_results={"file_name":save_to, "length": length, "sample rate": sr}    
-		all_stats=all_stats.append(temp_results, ignore_index=True)
 		#Now, storing the plots       
 		# plot_signal(signal,labels_flag=True).savefig(output_directory+'/signals/'+save_to+'.png')
 		# plot_fft(calc_fft(signal, sr),labels_flag=True).savefig(output_directory+'/ffts/'+save_to+'.png')
 		# plot_spectrogram(signal).savefig(output_directory+'/spectrograms/'+save_to+'.png')
 		#plot_mel_spectrogram(signal, rate=sr).savefig(output_directory+'/mel spectrograms/'+save_to+'.png')
-		
 		#Making the plots, 3 modes are available = simple, speedtune, timeshift
 		new_length=len(signal)/sr
 		plot_spectrogram(signal,rate=sr, mode="simple", target_length=new_length).savefig(output_directory+'/spectrograms/batsnet_train/1/'+save_to+'.png')
@@ -230,7 +238,7 @@ for path in (Path(input_directory).rglob('*.wav')):
 
 
 		
-		random_augmentation=random.randint(1, 1)
+		random_augmentation=random.randint(0, 1)
 		if(random_augmentation==0):
 			plot_spectrogram(signal,rate=sr, mode="timeshift", target_length=new_length).savefig(output_directory+'/spectrograms/augmented/'+save_to+'.png')
 			plt.close()
@@ -242,23 +250,20 @@ for path in (Path(input_directory).rglob('*.wav')):
 
 
 
-		iterator=iterator+1
-		print(iterator)
-		if (iterator>=50):
-		    break
+
 		#break
 	except:
 		continue
 	
 ##Removing extreme values in all_stats
 		
-	
+
+all_stats.to_csv("/home/rabi/Documents/Thesis/audio data analysis/all_stats.csv")
 exit(0)
 
-from scipy import stats
 
 all_stats_df=all_stats.copy()[["length", "sample rate"]]
-
+#Save this all_stats_df to a file. 
 all_stats_final=all_stats_df[np.abs(all_stats_df.length-all_stats_df.length.mean()) <= (3*all_stats_df.length.std())]
 
 

@@ -2,7 +2,7 @@
 setup: selflabel
 
 # Threshold
-confidence_threshold: 0.05 #changed from 0.99
+confidence_threshold: 0.90 #changed from 0.99
 
 # EMA
 use_ema: True
@@ -20,7 +20,7 @@ num_heads: 1
 # Dataset
 train_db_name: batsnet
 val_db_name: batsnet
-num_classes: 10
+num_classes: 5
 
 # Transformations
 augmentation_strategy: batsnet_strategy 
@@ -48,8 +48,8 @@ optimizer_kwargs:
    weight_decay: 0.0
    nesterov: False
    momentum: 0.9
-epochs: 1
-batch_size: 1
+epochs: 10
+batch_size: 25
 num_workers: 8
 
 # Scheduler

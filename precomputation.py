@@ -190,7 +190,7 @@ def plot_mel_spectrogram(signals, labels_flag=False, rate=44100):
 
 
 mode='plotting'#"just-calculations"
-sample_size=2
+sample_size=500
 #input_directory = r'/home/rabi/Documents/Thesis/unsampled Two Samples'
 input_directory = r'/media/ausserver4/DATA/Bats audio records'
 #output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/all plots'

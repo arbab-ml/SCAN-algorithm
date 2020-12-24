@@ -123,7 +123,7 @@ def main():
     torch.save(model.module.state_dict(), p['selflabel_model'])
     #------------------------------------------------------------------
     #Now, saving the i) results in CSV and ii) results in a dedicated folder with $cluster_$imagefile ($probability).png(s)
-    results_folder="/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/plots/spectrograms/results/"
+    results_folder="/media/ausserver4/DATA/Code/experiments/SCAN ALGO/Thesis 24 dec/Thesis/audio data analysis/audio-clustering/plots/spectrograms/results/"
     all_filedirectories=[just_path[0] for just_path in train_dataset.dataset.imgs] # this is a list
     cluster_labels=predictions[0]['predictions']
     #cluster_probs=predictions[0]['probabilities'], Leaving it for now. 

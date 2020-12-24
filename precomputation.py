@@ -189,12 +189,12 @@ def plot_mel_spectrogram(signals, labels_flag=False, rate=44100):
 #https://www.kaggle.com/haqishen/augmentation-methods-for-audio
 
 
-mode="just-calculations"
-sample_size=9999999999
+mode='plotting'#"just-calculations"
+sample_size=2
 #input_directory = r'/home/rabi/Documents/Thesis/unsampled Two Samples'
-input_directory = r'/media/rabi/Data/Thesis Data/Bats audio records'
+input_directory = r'/media/ausserver4/DATA/Bats audio records'
 #output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/all plots'
-output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/plots'
+output_directory=r'/media/ausserver4/DATA/Code/experiments/SCAN ALGO/Thesis 24 dec/Thesis/audio data analysis/audio-clustering/plots'
 final_target_length=1 #1 second
 iterator=0
 random.seed(5) 
@@ -219,9 +219,34 @@ for path in tqdm(Path(input_directory).rglob('*.wav')):
 		if(length<final_target_length):
 			print("lengh less than threshold")
 			continue
+			
 
-		start_value=random.randrange(0, int(length)-final_target_length, 1)
-		end_value=start_value+final_target_length
+		#Old, random segmentation
+		#start_value=random.randrange(0, int(length)-final_target_length, 1)
+		#end_value=start_value+final_target_length
+
+		#New, segmenting the values according to maximum moving average value
+		window_size = int(sr/1) # Considering one second
+		window_jump=int(sr/1)
+
+		window_iterator = 0
+		moving_averages = np.empty((0))
+		equivalent_time=np.empty((0))
+		while window_iterator < (len(signal) - window_size + 1):
+			this_window = np.abs(signal[window_iterator : window_iterator + window_size])
+			window_average = np.sum(this_window) / window_size
+			moving_averages=np.append(moving_averages,window_average)
+			equivalent_time=np.append(equivalent_time, window_iterator/sr)
+			window_iterator += window_jump
+		max_point_index=np.argmax(moving_averages)
+		max_point_in_time=equivalent_time[max_point_index]
+		print(max_point_in_time)
+		
+		#Considering the values which are half second before the point of max signals
+		start_value= int(max_point_in_time  )
+		end_value=int(max_point_in_time+1)
+
+
 		signal=signal[(start_value*sr):(end_value*sr)]
 		#Now saving the statistics (sr and length)
 		#filename_short=save_to.split('/')[-1]
@@ -258,7 +283,7 @@ for path in tqdm(Path(input_directory).rglob('*.wav')):
 ##Removing extreme values in all_stats
 		
 
-all_stats.to_csv("/home/rabi/Documents/Thesis/audio data analysis/all_stats.csv")
+all_stats.to_csv("/media/ausserver4/DATA/Code/experiments/SCAN ALGO/Thesis 24 dec/Thesis/audio data analysis/all_stats.csv")
 exit(0)
 
 

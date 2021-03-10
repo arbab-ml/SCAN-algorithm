@@ -190,15 +190,24 @@ def plot_mel_spectrogram(signals, labels_flag=False, rate=44100):
 
 
 mode='plotting'#"just-calculations"
-sample_size=500
+sample_size=1000
 #input_directory = r'/home/rabi/Documents/Thesis/unsampled Two Samples'
-input_directory = r'/media/ausserver4/DATA/Bats audio records'
+input_directory = r'/media/rabi/Data/ThesisData/Bats audio records'
 #output_directory=r'/home/rabi/Documents/Thesis/audio data analysis/audio-clustering/all plots'
-output_directory=r'/media/ausserver4/DATA/Code/experiments/SCAN ALGO/Thesis 24 dec/Thesis/audio data analysis/audio-clustering/plots'
-final_target_length=1 #1 second
+output_directory=r'/media/rabi/Data/ThesisData/audio data analysis/audio-clustering/plots_10march'
+
+bat_calls_data_dir=r'/home/rabi/Documents/Thesis/batdetect/bat_eval/results/results.csv'
+
+final_target_length=0.5 #1 second
 iterator=0
 random.seed(5) 
 all_stats=pd.DataFrame(columns=["file_name", "length", "sample rate"])
+
+bat_calls_data=pd.read_csv(bat_calls_data_dir)
+
+bat_calls_data_processed=bat_calls_data.iloc[bat_calls_data.groupby('file_name')['detection_prob'].agg(pd.Series.idxmax)]
+bat_calls_data_processed=bat_calls_data_processed.set_index("file_name")
+
 for path in tqdm(Path(input_directory).rglob('*.wav')):
 	try:
 		save_to= str(path.relative_to(input_directory)).split('/')[-1]
@@ -225,29 +234,39 @@ for path in tqdm(Path(input_directory).rglob('*.wav')):
 		#start_value=random.randrange(0, int(length)-final_target_length, 1)
 		#end_value=start_value+final_target_length
 
-		#New, segmenting the values according to maximum moving average value
-		window_size = int(sr/1) # Considering one second
-		window_jump=int(sr/1)
+		# Version 2.0 (Now old-dated)
 
-		window_iterator = 0
-		moving_averages = np.empty((0))
-		equivalent_time=np.empty((0))
-		while window_iterator < (len(signal) - window_size + 1):
-			this_window = np.abs(signal[window_iterator : window_iterator + window_size])
-			window_average = np.sum(this_window) / window_size
-			moving_averages=np.append(moving_averages,window_average)
-			equivalent_time=np.append(equivalent_time, window_iterator/sr)
-			window_iterator += window_jump
-		max_point_index=np.argmax(moving_averages)
-		max_point_in_time=equivalent_time[max_point_index]
-		print(max_point_in_time)
+				# #New, segmenting the values according to maximum moving average value
+				# window_size = int(sr/1) # Considering one second
+				# window_jump=int(sr/1)
+
+				# window_iterator = 0
+				# moving_averages = np.empty((0))
+				# equivalent_time=np.empty((0))
+				# while window_iterator < (len(signal) - window_size + 1):
+				# 	this_window = np.abs(signal[window_iterator : window_iterator + window_size])
+				# 	window_average = np.sum(this_window) / window_size
+				# 	moving_averages=np.append(moving_averages,window_average)
+				# 	equivalent_time=np.append(equivalent_time, window_iterator/sr)
+				# 	window_iterator += window_jump
+				# max_point_index=np.argmax(moving_averages)
+				# max_point_in_time=equivalent_time[max_point_index]
+				# print(max_point_in_time)
+				
+				# #Considering the values which are half second before the point of max signals
+				# start_value= int(max_point_in_time  )
+				# end_value=int(max_point_in_time+1)
 		
-		#Considering the values which are half second before the point of max signals
-		start_value= int(max_point_in_time  )
-		end_value=int(max_point_in_time+1)
+		#Version 3.0 (using batdetect algorithm to select the segment from audio)
 
-
-		signal=signal[(start_value*sr):(end_value*sr)]
+			#Now, spread the point of maximum confidence and spread start_value and end_value around it (total duration =0.5 seconds)
+		
+		local_file_path='/'+str(path.relative_to(input_directory))
+		detected_time=bat_calls_data_processed.loc[local_file_path]['detection_time']
+		start_value=(detected_time-(final_target_length/2))
+		end_value=(detected_time+(final_target_length/2))
+		
+		signal=signal[int(start_value*sr):int(end_value*sr)]
 		#Now saving the statistics (sr and length)
 		#filename_short=save_to.split('/')[-1]
 		#Now, storing the plots       
@@ -281,10 +300,10 @@ for path in tqdm(Path(input_directory).rglob('*.wav')):
 		continue
 	
 ##Removing extreme values in all_stats
-		
+exit(0)		
 
-all_stats.to_csv("/media/ausserver4/DATA/Code/experiments/SCAN ALGO/Thesis 24 dec/Thesis/audio data analysis/all_stats.csv")
-exit(0)
+all_stats.to_csv("/home/rabi/Documents/Thesis/audio data analysis/all_stats.csv")
+
 
 
 all_stats_df=all_stats.copy()[["length", "sample rate"]]

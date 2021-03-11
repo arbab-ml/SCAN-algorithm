@@ -36,8 +36,9 @@ def simclr_train(train_loader, model, criterion, optimizer, epoch):
         loss.backward()
         optimizer.step()
 
-        if i % 25 == 0:
+        if ((epoch-1)==i):
             progress.display(i)
+
 
 
 def scan_train(train_loader, model, criterion, optimizer, epoch, update_cluster_head_only=False):
@@ -92,8 +93,11 @@ def scan_train(train_loader, model, criterion, optimizer, epoch, update_cluster_
         total_loss.backward()
         optimizer.step()
 
-        if i % 25 == 0:
-            progress.display(i)
+        #print("--> "+ str(epoch) )
+        #print("--> "+ str(i) )
+        #if ((epoch-1)==i):
+    progress.display(i)
+
 
 
 def selflabel_train(train_loader, model, criterion, optimizer, epoch, ema=None):

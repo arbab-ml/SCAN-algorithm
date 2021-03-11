@@ -49,7 +49,7 @@ optimizer_kwargs:
    nesterov: False
    momentum: 0.9
 epochs: 10
-batch_size: 25
+batch_size: 15
 num_workers: 8
 
 # Scheduler

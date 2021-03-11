@@ -108,7 +108,7 @@ def main():
         lowest_loss_head = scan_stats['lowest_loss_head']
         lowest_loss = scan_stats['lowest_loss']
        
-        if (1):#lowest_loss < best_loss: # Now, doing it always, because there's no dataset for validation
+        if (lowest_loss < best_loss): # Now, doing it always, because there's no dataset for validation
             print('New lowest loss on validation set: %.4f -> %.4f' %(best_loss, lowest_loss))
             print('Lowest loss head is %d' %(lowest_loss_head))
             best_loss = lowest_loss

@@ -218,7 +218,7 @@ class batsnet_transformation:
         file_name=path.split('/')[-1]
         base_path='/'.join(path.split('/')[:-3])# Going three directories back . THIS IS DEPENDENT ON THE STRCTURE of folders. 
         modifed_path=base_path+'/augmented/'+file_name
-        resize_func = transforms.Resize(500)  #Resizing the image (As done with original image)
+        resize_func = transforms.Resize(360)  #Resizing the image (As done with original image)
 
         with open(modifed_path, 'rb') as f:
             return resize_func(Image.open(f).convert('RGB'))  #For now we are not changing anything

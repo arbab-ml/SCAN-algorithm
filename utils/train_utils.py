@@ -35,9 +35,7 @@ def simclr_train(train_loader, model, criterion, optimizer, epoch):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
-        if ((epoch-1)==i):
-            progress.display(i)
+    progress.display(i)
 
 
 
@@ -128,5 +126,4 @@ def selflabel_train(train_loader, model, criterion, optimizer, epoch, ema=None):
             ema.update_params(model)
             ema.apply_shadow(model)
         
-        if i % 25 == 0:
-            progress.display(i)
+    progress.display(i)

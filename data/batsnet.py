@@ -18,7 +18,7 @@ class batsnet(datasets.ImageFolder):
                                          transform=None)
         self.transform = transform 
         self.split = split
-        self.resize = tf.Resize(360)
+        self.resize = tf.Resize(500)
     
     def __len__(self):
         return len(self.imgs)

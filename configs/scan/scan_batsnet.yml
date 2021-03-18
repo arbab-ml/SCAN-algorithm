@@ -11,7 +11,7 @@ update_cluster_head_only: False # Update full network in SCAN
 num_heads: 1 # Only use one head
 
 # Model
-backbone: resnet18  #!!CHANGED FROM Resnet50!!
+backbone: resnet50  #!!CHANGED FROM Resnet50!!
 
 # Dataset
 train_db_name: batsnet
@@ -43,7 +43,7 @@ optimizer: adam
 optimizer_kwargs:
    lr: 0.0001
    weight_decay: 0.0001
-epochs: 26
+epochs: 30
 batch_size: 5
 num_workers: 8
 

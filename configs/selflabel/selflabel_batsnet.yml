@@ -14,7 +14,7 @@ criterion_kwargs:
    apply_class_balancing: False
 
 # Model
-backbone: resnet18 #!!CHANGED FROM Resnet50!!
+backbone: resnet50 #!!CHANGED FROM Resnet50!!
 num_heads: 1
 
 # Dataset
@@ -48,7 +48,7 @@ optimizer_kwargs:
    weight_decay: 0.0
    nesterov: False
    momentum: 0.9
-epochs: 10
+epochs: 20
 batch_size: 15
 num_workers: 8
 

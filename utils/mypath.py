@@ -24,6 +24,6 @@ class MyPath(object):
             return '/path/to/imagenet/'
         
         elif database in ['batsnet']:
-            return '/content/spectrograms'
+            return '/content/spectrograms_normalized'
         else:
             raise NotImplementedError

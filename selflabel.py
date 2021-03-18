@@ -114,7 +114,6 @@ def main():
     # Evaluate and save the final model
     print(colored('Evaluate model at the end', 'blue'))
     predictions = get_predictions(p, val_dataloader, model)
-    predictions = get_predictions(p, val_dataloader, model)
     # clustering_stats = hungarian_evaluate(0, predictions, 
     #                             class_names=val_dataset.classes,
     #                             compute_confusion_matrix=True,
@@ -127,19 +126,21 @@ def main():
     all_filedirectories=[just_path[0] for just_path in train_dataset.dataset.imgs] # this is a list
     cluster_labels=predictions[0]['predictions']
     #cluster_probs=predictions[0]['probabilities'], Leaving it for now. 
-    final_results=pd.DataFrame(columns=['file_directory', 'cluster'])
-    final_results["file_directory"]=all_filedirectories
+    final_results=pd.DataFrame(columns=['Image Name', 'cluster'])
+    final_results["Image Name"]=all_filedirectories
     final_results['cluster']=cluster_labels
     final_results.to_csv(results_folder+'/summary file.csv')
     #Now, saving the files (themselves) while renaming them
-    for file_directory,cluster in zip(final_results.file_directory, final_results.cluster):
-        #Read file
-        image_data=cv2.imread(file_directory)
-        #re-save it. 
-        original_name=file_directory.split('/')[-1]
-        modified_file_name=str(cluster)+' Cluster: '+original_name
-        modified_path=results_folder+modified_file_name 
-        cv2.imwrite(modified_path,image_data)        
+        #Now, the below is done seperately using file_name_to_image in preprocessing folder. 
+
+    # for file_directory,cluster in zip(final_results.file_directory, final_results.cluster):
+    #     #Read file
+    #     image_data=cv2.imread(file_directory)
+    #     #re-save it. 
+    #     original_name=file_directory.split('/')[-1]
+    #     modified_file_name=str(cluster)+' Cluster: '+original_name
+    #     modified_path=results_folder+modified_file_name 
+    #     cv2.imwrite(modified_path,image_data)        
 
 
 if __name__ == "__main__":

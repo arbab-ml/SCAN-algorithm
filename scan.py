@@ -31,16 +31,14 @@ def main():
     # Data
     print(colored('Get dataset and dataloaders', 'blue'))
     train_transformations = get_train_transformations(p)
-    #val_transformations = get_val_transformations(p)
+
     train_dataset = get_train_dataset(p, train_transformations, 
                                         split='train', to_neighbors_dataset = True)
-    #val_dataset = get_val_dataset(p, val_transformations, to_neighbors_dataset = True)
+
     train_dataloader = get_train_dataloader(p, train_dataset)
     val_dataloader = get_val_dataloader(p, train_dataset)  #!val_dataset replaced with train_...
     print('Train transforms:', train_transformations)
-    #print('Validation transforms:', val_transformations)
-    #print('Train samples %d - Val samples %d' %(len(train_dataset), len(val_dataset)))
-    
+
     # Model
     print(colored('Get model', 'blue'))
     model = get_model(p, p['pretext_model'])
@@ -94,11 +92,6 @@ def main():
         print('Train ...')
         scan_train(train_dataloader, model, criterion, optimizer, epoch, p['update_cluster_head_only'])
 
-        # Evaluate 
-
-        #!!!!!!!!!!!!!!!!!Skipping the next lines because we are not evaluating YET. 
-        
-
         print('Make prediction on validation set ...')
         predictions = get_predictions(p, val_dataloader, model)   #inputting the train data to get the clusters !! 
         
@@ -108,7 +101,7 @@ def main():
         lowest_loss_head = scan_stats['lowest_loss_head']
         lowest_loss = scan_stats['lowest_loss']
        
-        if (1):#(lowest_loss < best_loss): # Now, doing it always, because there's no dataset for validation
+        if (1): #(lowest_loss < best_loss): # Now, doing it always, because there's no dataset for validation
             print('New lowest loss on validation set: %.4f -> %.4f' %(best_loss, lowest_loss))
             print('Lowest loss head is %d' %(lowest_loss_head))
             best_loss = lowest_loss
@@ -136,7 +129,7 @@ def main():
     predictions = get_predictions(p, val_dataloader, model)
     predictions = get_predictions(p, val_dataloader, model)
 
-    #!!saving here because selflabel step is  not performed
+    #!!saving here because selflabel step is  not performed (because of reason mentioned in SCAN colab.ipynb
     results_folder="/content"
     all_filedirectories=[just_path[0] for just_path in train_dataset.dataset.imgs] # this is a list
     cluster_labels=predictions[0]['predictions']

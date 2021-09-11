@@ -61,9 +61,8 @@ def main():
     val_transforms = get_val_transformations(p)
     train_dataset = get_train_dataset(p, {'standard': val_transforms, 'augment': strong_transforms},
                                         split='train', to_augmented_dataset=True) 
-    train_dataloader = get_train_dataloader(p, train_dataset)
-    #val_dataset = get_val_dataset(p, val_transforms) 
-    val_dataloader = get_val_dataloader(p, train_dataset) # 
+    train_dataloader = get_train_dataloader(p, train_dataset) 
+    val_dataloader = get_val_dataloader(p, train_dataset) 
     print(colored('Train samples %d - Val samples %d' %(len(train_dataset), len(train_dataset)), 'yellow')) #val_ replaced with train_
 
     # Checkpoint
@@ -120,8 +119,9 @@ def main():
     #                             confusion_matrix_file=os.path.join(p['selflabel_dir'], 'confusion_matrix.png'))
     # print(clustering_stats)
     torch.save(model.module.state_dict(), p['selflabel_model'])
-    #------------------------------------------------------------------
-    #Now, saving the i) results in CSV and ii) results in a dedicated folder with $cluster_$imagefile ($probability).png(s)
+ 
+    #Now, saving the i) results in CSV and ii) results in a dedicated folder with $cluster_$imagefile ($probability).png(s). For specie class clustering, This step was performed alrady in SCAN.py
+  
     results_folder="/content"
     all_filedirectories=[just_path[0] for just_path in train_dataset.dataset.imgs] # this is a list
     cluster_labels=predictions[0]['predictions']

@@ -5,7 +5,7 @@ Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by
 import argparse
 import os
 import torch
-
+import pandas as pd
 from termcolor import colored
 from utils.config import create_config
 from utils.common_config import get_train_transformations, get_val_transformations,\
@@ -135,11 +135,17 @@ def main():
     model.module.load_state_dict(model_checkpoint['model'])
     predictions = get_predictions(p, val_dataloader, model)
     predictions = get_predictions(p, val_dataloader, model)
-    # clustering_stats = hungarian_evaluate(model_checkpoint['head'], predictions, 
-    #                         class_names=val_dataset.dataset.classes, 
-    #                         compute_confusion_matrix=True, 
-    #                         confusion_matrix_file=os.path.join(p['scan_dir'], 'confusion_matrix.png'))
-    # print(clustering_stats)         
+
+    #!!saving here because selflabel step is  not performed
+    results_folder="/content"
+    all_filedirectories=[just_path[0] for just_path in train_dataset.dataset.imgs] # this is a list
+    cluster_labels=predictions[0]['predictions']
+    #cluster_probs=predictions[0]['probabilities'], Leaving it for now. 
+    final_results=pd.DataFrame(columns=['Image Name', 'prediction'])
+    final_results["Image Name"]=all_filedirectories
+    final_results['cluster']=cluster_labels
+    final_results.to_csv(results_folder+'/results_scan.csv')
+      
     
 if __name__ == "__main__":
     main()

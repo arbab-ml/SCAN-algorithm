@@ -24,6 +24,6 @@ class MyPath(object):
             return '/path/to/imagenet/'
         
         elif database in ['batsnet']:
-            return '/content/SCAN-algorithm/spectrograms_vmin_vmax_highpass_balance_top5_2_cropped'
+            return '/content/SCAN-algorithm/our_data'
         else:
             raise NotImplementedError

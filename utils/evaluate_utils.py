@@ -68,6 +68,7 @@ def get_predictions(p, dataloader, model, return_features=False):
             neighbors.append(batch['possible_neighbors'])
 
     predictions = [torch.cat(pred_, dim = 0).cpu() for pred_ in predictions]
+    print(torch.unique(predictions[0]))
     probs = [torch.cat(prob_, dim=0).cpu() for prob_ in probs]
     targets = torch.cat(targets, dim=0)
 

@@ -1,5 +1,6 @@
                       Please use the branch for_bats_dataset and not the master
-
+# SCAN
+ Pytorch Implementation of https://arxiv.org/abs/2005.12320 for bats calls clustering
 
 ### Setup
 The following files need to be adapted in order to run the code on your own machine:

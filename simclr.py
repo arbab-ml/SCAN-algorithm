@@ -67,10 +67,6 @@ def main():
                                 p['model_kwargs']['features_dim'],
                                 p['num_classes'], p['criterion_kwargs']['temperature'])
     memory_bank_base.cuda()
-    #memory_bank_val = MemoryBank(len(val_dataset),
-    #                            p['model_kwargs']['features_dim'],
-    #                            p['num_classes'], p['criterion_kwargs']['temperature'])
-    #memory_bank_val.cuda()
 
     # Criterion
     print(colored('Retrieve criterion', 'blue'))
@@ -117,9 +113,7 @@ def main():
 
         # Evaluate (To monitor progress - Not for validation)
         print('Evaluate ...')
-       # top1 = contrastive_evaluate(val_dataloader, model, memory_bank_base)
-        #print('Result of kNN evaluation is %.2f' %(top1)) 
-        
+
         # Checkpoint
         print('Checkpoint ...')
         torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 

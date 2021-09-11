@@ -53,12 +53,10 @@ def main():
     #print('Validation transforms:', val_transforms)
     train_dataset = get_train_dataset(p, train_transforms, to_augmented_dataset=True,
                                         split='train+unlabeled') # Split is for stl-10
-    #val_dataset = get_val_dataset(p, val_transforms) 
+ 
 
     train_dataloader = get_train_dataloader(p, train_dataset)
-    #val_dataloader = get_val_dataloader(p, val_dataset)
-    #print('Dataset contains {}/{} train/val samples'.format(len(train_dataset), len(val_dataset)))
-    
+
     # Memory Bank
     print(colored('Build MemoryBank', 'blue'))
     base_dataset = get_train_dataset(p, val_transforms, split='train') # Dataset w/o augs for knn eval
@@ -67,10 +65,6 @@ def main():
                                 p['model_kwargs']['features_dim'],
                                 p['num_classes'], p['criterion_kwargs']['temperature'])
     memory_bank_base.cuda()
-    #memory_bank_val = MemoryBank(len(val_dataset),
-    #                            p['model_kwargs']['features_dim'],
-    #                            p['num_classes'], p['criterion_kwargs']['temperature'])
-    #memory_bank_val.cuda()
 
     # Criterion
     print(colored('Retrieve criterion', 'blue'))
@@ -118,9 +112,7 @@ def main():
 
         # Evaluate (To monitor progress - Not for validation)
         print('Evaluate ...')
-       # top1 = contrastive_evaluate(val_dataloader, model, memory_bank_base)
-        #print('Result of kNN evaluation is %.2f' %(top1)) 
-        
+
         # Checkpoint
         print('Checkpoint ...')
         torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
